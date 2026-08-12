@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Hacker News Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body id="body" class="flex items-center justify-center min-h-screen bg-gradient-to-tr from-sky-600 to-fuchsia-600">
+	<div class="bg-white/10 backdrop-blur-lg p-8 rounded-2xl shadow-2xl max-w-lg w-full text-center text-white">
+    <h1 class="text-2xl font-bold mb-6">Playwright Test Runner</h1>
+    <button 
+      id="runButton" 
+      class="px-6 py-3 bg-green-600 hover:bg-green-700 rounded-lg font-semibold mb-6 transition">
+      Run Tests
+    </button>
+    <div id="results" class="text-left bg-black/20 p-4 rounded-lg max-h-100"></div>
+  </div>
+
+  <script>
+    const button = document.getElementById('runButton');
+    const results = document.getElementById('results');
+    const body = document.getElementById('body');
+
+    const handleClick = async () => {
+        results.innerHTML = '<p class="italic text-gray-300">Running test...</p>'
+
+        const response = await fetch('/run-script');
+        const data = await response.json();
+
+        
+
+        body.innerHTML = `
+                <div class="bg-white/10 backdrop-blur-lg p-8 rounded-2xl shadow-2xl max-w-3xl w-full text-center text-white">
+
+                    <h1 class="text-2xl font-bold mb-6">Playwright Test Runner</h1>
+
+                    <div class="text-center text-xl bg-black/20 p-4 rounded-lg max-h-100">
+                        <p>Status: All posts are ${data.isChronological ? '✅ Chronological' : '❌ Not Chronological'}</p>
+                        <p>Success Rate: ${data.successRate}%</p>
+                    </div>
+
+                    <h1 class="text-xl font-bold mt-4 inline-block bg-black/20 p-4 pl-12 pr-12 rounded-lg">
+                        Statistics
+                    </h1>
+
+                    <div class="text-xl mt-4 bg-black/20 p-4 rounded-lg space-y-4">
+
+                        <div class="flex justify-between">
+                          <p class="text-left">Articles validated: ${data.times.length} articles</p>
+                          <p class="text-right">Execution time: ${data.duration} ms</p>
+                        </div>
+
+                        <div class="flex justify-between">
+                          <p class="text-left">Validations passed: ${data.passed}/99</p>
+                          <p class="text-right">Validations failed: ${data.failed}/99</p>
+                        </div>
+
+                        <div class="flex justify-between">
+                          <p class="text-right whitespace-nowrap">Newest time: ${data.newestDate}</p>
+                          <p class="text-left whitespace-nowrap">Oldest time: ${data.oldestDate}</p>
+                        </div>
+
+                        <div>
+                          <button id="runButton" class="px-6 py-3 bg-green-600 hover:bg-green-700 rounded-lg mt-8 font-semibold transition">
+                            Run Tests Again
+                          </button>
+                        </div>
+                    </div>
+                </div>
+        `;
+
+        const runButton = document.getElementById('runButton');
+        runButton.addEventListener('click', handleClick);
+    }; 
+
+    button.addEventListener('click', handleClick);
+  </script>
+</body>
+</html>
