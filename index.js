@@ -17,7 +17,7 @@ async function sortHackerNewsArticles() {
     // go to Hacker News
     const response = await page.goto("https://news.ycombinator.com/newest");
 
-    if (!response.ok) {
+    if (!response.ok()) {
       throw new Error(`Error loading page. Error code ${response.status}`);
     }
 
