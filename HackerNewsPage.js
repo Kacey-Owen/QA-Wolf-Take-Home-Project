@@ -24,12 +24,12 @@ class HackerNewsPage {
         for (let i = 0; i < 100; i++) {
 
             if (this.count < 29) {
-                let title = await this.ageElements.nth(this.count).getAttribute('title');
-                this.times.push(title.split(' ')[0]);
+                let timestamp = await this.ageElements.nth(this.count).getAttribute('title');
+                this.times.push(timestamp);
                 this.count++;
             } else {
-                let title = await this.ageElements.nth(this.count).getAttribute('title');
-                this.times.push(title.split(' ')[0]);
+                let timestamp = await this.ageElements.nth(this.count).getAttribute('title');
+                this.times.push(timestamp);
                 await this.getNextPage();
                 this.count = 0;
             }
