@@ -15,20 +15,16 @@ async function sortHackerNewsArticles() {
     const hackerNewsPage = new HackerNewsPage(page);
 
     // go to Hacker News
-    const response = await page.goto("https://news.ycombinator.com/newest");
-
-    if (!response.ok()) {
-      throw new Error(`Error loading page. Error code ${response.status}`);
-    }
+    await hackerNewsPage.open();
 
     // grab article timestamps
     await hackerNewsPage.getArticleTimestamps();
 
     // see if the timestamps are ordered newest to oldest
-    await hackerNewsPage.compareTimes();
+    hackerNewsPage.compareTimes();
 
     // output results
-    await hackerNewsPage.showResults();
+    hackerNewsPage.showResults();
 
     // create object literal
     result = {

@@ -17,6 +17,15 @@ class HackerNewsPage {
         this.oldestDate = null; // oldest date checked
     }
 
+    async open() {
+        // go to ycombinator.com/newest and check for error
+        const response = await this.page.goto("https://news.ycombinator.com/newest");
+
+        if (!response.ok()) {
+            throw new Error(`Error loading page. Error code ${response.status()}`);
+        }
+    }
+
     async getArticleTimestamps() {
         // get current time
         this.startTime = Date.now();
@@ -41,10 +50,9 @@ class HackerNewsPage {
         // go to next page, wait for it to fully load, then relocate the timestamps
         await this.morelink.click();
         await this.page.waitForLoadState('domcontentloaded');
-        this.ageElements = this.page.locator('.age');
     }
 
-    async compareTimes() {
+    compareTimes() {
         // convert to date objects and determine which is newer
         for (let i = 0; i < 99; i++) {
             this.loopCount++;
@@ -61,7 +69,7 @@ class HackerNewsPage {
         }
     }
 
-    async showResults() {
+    showResults() {
         // calculate execution time
         this.endTime = Date.now();
         this.executionTime = (this.endTime - this.startTime);
